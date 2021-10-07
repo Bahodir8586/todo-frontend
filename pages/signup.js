@@ -4,8 +4,8 @@ import axios from "../components/axios";
 import Signup from "../components/Signup";
 
 export async function getServerSideProps(context) {
-    const cookies = context.req.headers.cookie;
-    if (cookies?.split("=")[1]) {
+    const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
+    if (jwt) {
         return {
             redirect: {
                 destination: '/',

@@ -2,10 +2,12 @@ import Head from 'next/head'
 import axios from "../components/axios";
 import {useRouter} from "next/router";
 import Profile from "../components/Profile";
+import Cookies from 'js-cookie'
 
 export async function getServerSideProps(context) {
-    const cookies = context.req.headers.cookie;
-    if (!cookies || !cookies.split("=")[1]) {
+    const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
+    console.log(jwt)
+    if (!jwt) {
         return {
             redirect: {
                 destination: '/login',
@@ -15,7 +17,7 @@ export async function getServerSideProps(context) {
     }
     const response = await fetch("http://localhost:5000/api/users", {
         headers: {
-            'Authorization': `Bearer ${cookies.split("=")[1]}`
+            'Authorization': `Bearer ${jwt}`
         },
     })
     const data = await response.json()
@@ -27,7 +29,6 @@ export async function getServerSideProps(context) {
             }
         }
     }
-    console.log(data.data)
     return {
         props: {
             user: data.data.user
@@ -37,9 +38,17 @@ export async function getServerSideProps(context) {
 
 export default function Home({user}) {
     const router = useRouter()
-    console.log(user)
     const logoutHandler = () => {
-        axios.get('/users/logout').then(response => {
+        axios.get('/users/logout', {headers: {"Authorization": `Bearer ${Cookies.get('token')}`}}).then(response => {
+            Cookies.remove('token')
+            router.replace('/')
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    const deleteUser = () => {
+        axios.delete('/users', {headers: {"Authorization": `Bearer ${Cookies.get('token')}`}}).then(response => {
             console.log(response)
             router.replace('/')
         }).catch(error => {
@@ -59,8 +68,9 @@ export default function Home({user}) {
                 <Profile name={user.name}
                          email={user.email}
                          logout={logoutHandler}
-                         editUser={() => {}}
-                         deleteUser={() => {}}
+                         editUser={() => {
+                         }}
+                         deleteUser={deleteUser}
                 />
             </main>
         </div>

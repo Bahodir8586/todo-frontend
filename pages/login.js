@@ -2,10 +2,12 @@ import React from 'react';
 import Login from "../components/Login";
 import axios from "../components/axios";
 import {useRouter} from "next/router";
+import Cookies from 'js-cookie'
 
 export async function getServerSideProps(context) {
-    const cookies = context.req.headers.cookie;
-    if (cookies?.split("=")[1]) {
+    const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
+    console.log(jwt)
+    if (jwt) {
         return {
             redirect: {
                 destination: '/',
@@ -19,10 +21,9 @@ export async function getServerSideProps(context) {
 const LoginPage = () => {
     const router = useRouter()
     const loginHandler = (email, password) => {
-        console.log(email, password)
         axios.post('/users/login', {email, password}).then(response => {
-            console.log(response)
-            router.push('/', '/')
+            Cookies.set('token', response.data.token)
+            router.push('/')
         }).catch(error => {
             console.log(error)
         })
