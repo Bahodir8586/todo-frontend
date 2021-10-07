@@ -1,4 +1,6 @@
 import Head from 'next/head'
+import axios from "../components/axios";
+import {useRouter} from "next/router";
 
 export async function getServerSideProps(context) {
     const cookies = context.req.headers.cookie;
@@ -30,7 +32,16 @@ export async function getServerSideProps(context) {
 }
 
 export default function Home(props) {
+    const router = useRouter()
     console.log(props)
+    const logoutHandler = () => {
+        axios.get('/users/logout').then(response => {
+            console.log(response)
+            router.replace('/')
+        }).catch(error => {
+            console.log(error)
+        })
+    }
     return (
         <div>
             <Head>
@@ -40,7 +51,7 @@ export default function Home(props) {
             </Head>
 
             <main>
-
+                <button onClick={logoutHandler}>Log out</button>
             </main>
         </div>
     )
