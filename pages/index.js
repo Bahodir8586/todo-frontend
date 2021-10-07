@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import axios from "../components/axios";
 import {useRouter} from "next/router";
+import Profile from "../components/Profile";
 
 export async function getServerSideProps(context) {
     const cookies = context.req.headers.cookie;
@@ -26,14 +27,17 @@ export async function getServerSideProps(context) {
             }
         }
     }
+    console.log(data.data)
     return {
-        props: {data}
+        props: {
+            user: data.data.user
+        }
     }
 }
 
-export default function Home(props) {
+export default function Home({user}) {
     const router = useRouter()
-    console.log(props)
+    console.log(user)
     const logoutHandler = () => {
         axios.get('/users/logout').then(response => {
             console.log(response)
@@ -42,6 +46,7 @@ export default function Home(props) {
             console.log(error)
         })
     }
+
     return (
         <div>
             <Head>
@@ -50,8 +55,13 @@ export default function Home(props) {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
 
-            <main>
-                <button onClick={logoutHandler}>Log out</button>
+            <main className={'container p-4 bg-gray-50 min-h-screen'}>
+                <Profile name={user.name}
+                         email={user.email}
+                         logout={logoutHandler}
+                         editUser={() => {}}
+                         deleteUser={() => {}}
+                />
             </main>
         </div>
     )
