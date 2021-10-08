@@ -3,6 +3,7 @@ import axios from "../components/axios";
 import {useRouter} from "next/router";
 import Profile from "../components/Profile";
 import Cookies from 'js-cookie'
+import TaskList from "../components/TaskList";
 
 export async function getServerSideProps(context) {
     const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
@@ -72,6 +73,7 @@ export default function Home({user}) {
                          }}
                          deleteUser={deleteUser}
                 />
+                <TaskList/>
             </main>
         </div>
     )
