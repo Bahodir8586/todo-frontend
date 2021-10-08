@@ -2,8 +2,7 @@ import React from 'react';
 
 const Profile = ({name, email, logout, editUser, deleteUser}) => {
     return (
-
-        <div className="shadow-lg rounded-2xl w-80 p-4 bg-white dark:bg-gray-800">
+        <div className="shadow-lg rounded-2xl w-80 h-full p-4 bg-white dark:bg-gray-800">
             <div className="flex flex-row items-start gap-4">
                 <img src="https://www.tailwind-kit.com/images/person/1.jpg" className="w-28 h-28 rounded-lg"/>
                 <div className="h-28 w-full flex flex-col justify-between">

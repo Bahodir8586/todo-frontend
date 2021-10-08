@@ -57,7 +57,23 @@ export default function Home({user}) {
             console.log(error)
         })
     }
-    const tasks=[]
+    const tasks = [
+        {
+            id: 1,
+            name: "OS homework should be done till 10.10.2021",
+            status: 'todo'
+        },
+        {
+            id: 2,
+            name: "Database team project title should be submitted",
+            status: 'todo'
+        },
+        {
+            id: 3,
+            name: "CA quiz preparation",
+            status: 'finished'
+        }
+    ]
     return (
         <div>
             <Head>
@@ -66,7 +82,7 @@ export default function Home({user}) {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
 
-            <main className={'container p-4 bg-gray-50 min-h-screen'}>
+            <main className={'container p-4 bg-gray-50 min-h-screen flex'}>
                 <Profile name={user.name}
                          email={user.email}
                          logout={logoutHandler}
