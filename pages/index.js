@@ -8,31 +8,32 @@ import TaskList from "../components/TaskList";
 export async function getServerSideProps(context) {
     const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
     console.log(jwt)
-    if (!jwt) {
-        return {
-            redirect: {
-                destination: '/login',
-                permanent: false
-            }
-        }
-    }
+    // if (!jwt) {
+    //     return {
+    //         redirect: {
+    //             destination: '/login',
+    //             permanent: false
+    //         }
+    //     }
+    // }
     const response = await fetch("http://localhost:5000/api/users", {
         headers: {
             'Authorization': `Bearer ${jwt}`
         },
     })
     const data = await response.json()
-    if (data.status === "error") {
-        return {
-            redirect: {
-                destination: '/login',
-                permanent: false
-            }
-        }
-    }
+    // if (data.status === "error") {
+    //     return {
+    //         redirect: {
+    //             destination: '/login',
+    //             permanent: false
+    //         }
+    //     }
+    // }
     return {
         props: {
-            user: data.data.user
+            // user: data.data.user
+            user: {}
         }
     }
 }
@@ -56,7 +57,7 @@ export default function Home({user}) {
             console.log(error)
         })
     }
-
+    const tasks=[]
     return (
         <div>
             <Head>
@@ -73,7 +74,7 @@ export default function Home({user}) {
                          }}
                          deleteUser={deleteUser}
                 />
-                <TaskList/>
+                <TaskList tasks={tasks}/>
             </main>
         </div>
     )
