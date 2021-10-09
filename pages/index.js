@@ -5,6 +5,7 @@ import Profile from "../components/Profile";
 import Cookies from 'js-cookie'
 import TaskList from "../components/TaskList";
 import CreateTask from "../components/CreateTask";
+import {useState} from "react";
 
 export async function getServerSideProps(context) {
     const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
@@ -33,13 +34,14 @@ export async function getServerSideProps(context) {
     return {
         props: {
             user: data.data.user,
-            tasks: data.data.user.tasks
+            userTasks: data.data.user.tasks
         }
     }
 }
 
-export default function Home({user, tasks}) {
+export default function Home({user, userTasks}) {
     const router = useRouter()
+    const [tasks, setTasks] = useState(userTasks)
     const logoutHandler = () => {
         axios.get('/users/logout',).then(response => {
             Cookies.remove('token')
@@ -58,20 +60,29 @@ export default function Home({user, tasks}) {
         })
     }
 
+    const getTasks = () => {
+        axios.get('/tasks').then(response => {
+            console.log(response)
+            setTasks(response.data.data?.tasks?.tasks)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
     const createTask = (taskName) => {
         axios.post('/tasks', {name: taskName, status: "todo"}).then(response => {
             console.log(response)
+            getTasks()
         }).catch(error => {
             console.log(error)
         })
     }
 
     const doTask = (_id, status) => {
-        console.log(status)
         const newStatus = status === "todo" ? "finished" : "todo"
-        console.log(newStatus)
         axios.patch(`/tasks/${_id}`, {status: newStatus}).then(response => {
             console.log(response)
+            getTasks()
         }).catch(error => {
             console.log(error)
         })
@@ -80,6 +91,7 @@ export default function Home({user, tasks}) {
     const editTask = (_id, name) => {
         axios.patch(`/tasks/${_id}`, {name}).then(response => {
             console.log(response)
+            getTasks()
         }).catch(error => {
             console.log(error)
         })
@@ -89,6 +101,7 @@ export default function Home({user, tasks}) {
         console.log(_id)
         axios.delete(`/tasks/${_id}`).then(response => {
             console.log(response)
+            getTasks()
         }).catch(error => {
             console.log(error)
         })
@@ -115,7 +128,7 @@ export default function Home({user, tasks}) {
                     <div className={"flex w-full"}>
                         <TaskList tasks={tasks?.filter(task => task.status === "todo")}
                                   deleteTaskHandler={(_id) => deleteTask(_id)}
-                                  doTask={(_id,status) => doTask(_id,status)}
+                                  doTask={(_id, status) => doTask(_id, status)}
                                   editTask={(_id, name) => editTask(_id, name)}
                         />
                         <TaskList tasks={tasks?.filter(task => task.status === "finished")}
