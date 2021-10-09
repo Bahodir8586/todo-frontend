@@ -1,11 +1,18 @@
 import React from 'react';
 
-const TaskItem = ({_id, name, status,deleteTask}) => {
+const TaskItem = ({_id, name, status, doTask, deleteTask}) => {
     return (
         <li key={_id}>
             <div className="w-full hover:bg-gray-50 dark:hover:bg-gray-900 cursor-pointer" onDoubleClick={deleteTask}>
                 <div className="px-4 py-4 sm:px-6">
                     <div className="flex items-center justify-between">
+                        <input
+                            name="status"
+                            type="checkbox"
+                            onChange={doTask}
+                            checked={status === "finished"}
+                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        />
                         <p className="text-md text-gray-700 dark:text-white md:truncate">
                             {name}
                         </p>
