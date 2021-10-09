@@ -40,7 +40,7 @@ export async function getServerSideProps(context) {
 export default function Home({user, tasks}) {
     const router = useRouter()
     const logoutHandler = () => {
-        axios.get('/users/logout', {headers: {"Authorization": `Bearer ${Cookies.get('token')}`}}).then(response => {
+        axios.get('/users/logout', ).then(response => {
             Cookies.remove('token')
             router.replace('/')
         }).catch(error => {
@@ -49,7 +49,7 @@ export default function Home({user, tasks}) {
     }
 
     const deleteUser = () => {
-        axios.delete('/users', {headers: {"Authorization": `Bearer ${Cookies.get('token')}`}}).then(response => {
+        axios.delete('/users').then(response => {
             console.log(response)
             router.replace('/')
         }).catch(error => {
@@ -59,7 +59,7 @@ export default function Home({user, tasks}) {
 
     const deleteTask = (_id) => {
         console.log(_id)
-        axios.delete(`/tasks/${_id}`, {headers: {"Authorization": `Bearer ${Cookies.get('token')}`}}).then(response => {
+        axios.delete(`/tasks/${_id}`).then(response => {
             console.log(response)
         }).catch(error => {
             console.log(error)
