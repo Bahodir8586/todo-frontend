@@ -7,38 +7,37 @@ import TaskList from "../components/TaskList";
 
 export async function getServerSideProps(context) {
     const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
-    console.log(jwt)
-    // if (!jwt) {
-    //     return {
-    //         redirect: {
-    //             destination: '/login',
-    //             permanent: false
-    //         }
-    //     }
-    // }
+    if (!jwt) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
     const response = await fetch("http://localhost:5000/api/users", {
         headers: {
             'Authorization': `Bearer ${jwt}`
         },
     })
     const data = await response.json()
-    // if (data.status === "error") {
-    //     return {
-    //         redirect: {
-    //             destination: '/login',
-    //             permanent: false
-    //         }
-    //     }
-    // }
+    if (data.status === "error") {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
     return {
         props: {
-            // user: data.data.user
-            user: {}
+            user: data.data.user,
+            tasks: data.data.user.tasks
         }
     }
 }
 
-export default function Home({user}) {
+export default function Home({user, tasks}) {
     const router = useRouter()
     const logoutHandler = () => {
         axios.get('/users/logout', {headers: {"Authorization": `Bearer ${Cookies.get('token')}`}}).then(response => {
@@ -57,23 +56,15 @@ export default function Home({user}) {
             console.log(error)
         })
     }
-    const tasks = [
-        {
-            id: 1,
-            name: "OS homework should be done till 10.10.2021",
-            status: 'todo'
-        },
-        {
-            id: 2,
-            name: "Database team project title should be submitted",
-            status: 'todo'
-        },
-        {
-            id: 3,
-            name: "CA quiz preparation",
-            status: 'finished'
-        }
-    ]
+
+    const deleteTask = (id) => {
+        axios.delete(`/tasks/${id}`, {headers: {"Authorization": `Bearer ${Cookies.get('token')}`}}).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
     return (
         <div>
             <Head>
@@ -90,8 +81,9 @@ export default function Home({user}) {
                          }}
                          deleteUser={deleteUser}
                 />
-                <TaskList tasks={tasks.filter(task=>task.status==="todo")}/>
-                <TaskList tasks={tasks.filter(task=>task.status==="finished")}/>
+                <TaskList tasks={tasks?.filter(task => task.status === "todo")}
+                          deleteTaskHandler={(id) => deleteTask(id)}/>
+                <TaskList tasks={tasks?.filter(task => task.status === "finished")}/>
             </main>
         </div>
     )
