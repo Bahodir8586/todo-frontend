@@ -78,9 +78,9 @@ export default function Home({user, userTasks}) {
         })
     }
 
-    const doTask = (_id, status) => {
+    const doTask = (_id, name, status) => {
         const newStatus = status === "todo" ? "finished" : "todo"
-        axios.patch(`/tasks/${_id}`, {status: newStatus}).then(response => {
+        axios.patch(`/tasks/${_id}`, {status: newStatus, name}).then(response => {
             console.log(response)
             getTasks()
         }).catch(error => {
@@ -98,7 +98,6 @@ export default function Home({user, userTasks}) {
     }
 
     const deleteTask = (_id) => {
-        console.log(_id)
         axios.delete(`/tasks/${_id}`).then(response => {
             console.log(response)
             getTasks()
@@ -128,13 +127,13 @@ export default function Home({user, userTasks}) {
                     <div className={"flex w-full"}>
                         <TaskList tasks={tasks?.filter(task => task.status === "todo")}
                                   deleteTaskHandler={(_id) => deleteTask(_id)}
-                                  doTask={(_id, status) => doTask(_id, status)}
-                                  editTask={(_id, name) => editTask(_id, name)}
+                                  doTask={(_id, name, status) => doTask(_id, name, status)}
+                                  editTask={(_id, name, status) => editTask(_id, name, status)}
                         />
                         <TaskList tasks={tasks?.filter(task => task.status === "finished")}
                                   deleteTaskHandler={(_id) => deleteTask(_id)}
-                                  doTask={(_id, status) => doTask(_id, status)}
-                                  editTask={(_id, name) => editTask(_id, name)}
+                                  doTask={(_id, name, status) => doTask(_id,name, status)}
+                                  editTask={(_id, name, status) => editTask(_id, name,status)}
                         />
                     </div>
                 </div>
