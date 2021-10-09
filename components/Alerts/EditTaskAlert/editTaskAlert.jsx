@@ -1,8 +1,9 @@
-import {Fragment} from 'react'
+import {Fragment, useState} from 'react'
 import {Dialog, Transition} from '@headlessui/react'
 import {ExclamationIcon} from '@heroicons/react/outline'
 
-export default function Example({show, title, text, confirm, cancel}) {
+export default function Example({show, title, text, nameOfTask, confirm, cancel}) {
+    const [name, setName] = useState(nameOfTask)
     return (
         <Transition.Root show={show} as={Fragment}>
             <Dialog
@@ -54,12 +55,22 @@ export default function Example({show, title, text, confirm, cancel}) {
                                             {text}
                                         </p>
                                     </div>
+                                    <div className="mt-2 ">
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
+                                            className="shadow-sm w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md py-2"
+                                            placeholder="Name"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                                 <button
                                     type="button"
-                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
                                     onClick={() => confirm()}
                                 >
                                     Continue

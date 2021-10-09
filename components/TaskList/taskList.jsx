@@ -13,7 +13,7 @@ const TaskList = ({tasks, editTask, doTask, deleteTaskHandler}) => {
                                   status={status}
                                   deleteTask={() => deleteTaskHandler(_id)}
                                   doTask={() => doTask(_id, name, status)}
-                                  // editTask={(name) => editTask(_id, name, status)}
+                                  editTask={() => editTask(_id, name, status)}
                         />
                     )}
                 </ul>

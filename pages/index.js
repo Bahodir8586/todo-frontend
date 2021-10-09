@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 import TaskList from "../components/TaskList";
 import CreateTask from "../components/CreateTask";
 import DeleteAlert from "./../components/Alerts/DeleteAlert"
+import EditTaskAlert from "./../components/Alerts/EditTaskAlert"
 import {useState} from "react";
 
 export async function getServerSideProps(context) {
@@ -44,10 +45,12 @@ export default function Home({user, userTasks}) {
     const router = useRouter()
     const [tasks, setTasks] = useState(userTasks)
     const [selectedTaskId, setSelectedTaskId] = useState()
+    const [selectedTask, setSelectedTask] = useState({})
 
     const [showDeleteUserAlert, setShowDeleteUserAlert] = useState(false)
     const [showDeleteTaskAlert, setShowDeleteTaskAlert] = useState(false)
     const [showDeleteAllAlert, setShowDeleteAllAlert] = useState(false)
+    const [showEditTaskAlert, setShowEditTaskAlert] = useState(false)
 
     const logoutHandler = () => {
         axios.get('/users/logout',).then(response => {
@@ -154,6 +157,15 @@ export default function Home({user, userTasks}) {
                     confirm={() => deleteAllTasks()}
                     cancel={() => setShowDeleteAllAlert(false)}
                 />
+                <EditTaskAlert
+                    show={showEditTaskAlert}
+                    title={"Edit Task"}
+                    nameOfTask={selectedTask.name}
+                    confirm={(name) => {
+                        editTask(selectedTask._id, name, selectedTask.status)
+                    }}
+                    cancel={() => setShowEditTaskAlert(false)}
+                />
                 <div className={"items-center flex flex-col"}>
                     <Profile name={user.name}
                              email={user.email}
@@ -179,10 +191,16 @@ export default function Home({user, userTasks}) {
                                       setShowDeleteTaskAlert(true)
                                   }}
                                   doTask={(_id, name, status) => doTask(_id, name, status)}
-                                  editTask={(_id, name, status) => editTask(_id, name, status)}
+                                  editTask={(_id, name, status) => {
+                                      setShowEditTaskAlert(true)
+                                      setSelectedTask({_id, name, status})
+                                  }}
                         />
                         <TaskList tasks={tasks?.filter(task => task.status === "finished")}
-                                  deleteTaskHandler={(_id) => deleteTask(_id)}
+                                  deleteTaskHandler={(_id) => {
+                                      setSelectedTaskId(_id)
+                                      setShowDeleteTaskAlert(true)
+                                  }}
                                   doTask={(_id, name, status) => doTask(_id, name, status)}
                                   editTask={(_id, name, status) => editTask(_id, name, status)}
                         />
