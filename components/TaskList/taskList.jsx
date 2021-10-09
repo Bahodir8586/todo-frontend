@@ -1,7 +1,7 @@
 import React from 'react';
 import TaskItem from "./TaskItem";
 
-const TaskList = ({tasks, editTask, doTask, deleteTaskHandler}) => {
+const TaskList = ({tasks,  doTask, deleteTaskHandler}) => {
     return (
         <div className="px-4 py-5 rounded-t w-full sm:px-6">
             <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-md">
@@ -13,7 +13,6 @@ const TaskList = ({tasks, editTask, doTask, deleteTaskHandler}) => {
                                   status={status}
                                   deleteTask={() => deleteTaskHandler(_id)}
                                   doTask={() => doTask(_id, name, status)}
-                                  editTask={() => editTask(_id, name, status)}
                         />
                     )}
                 </ul>

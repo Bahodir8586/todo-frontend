@@ -45,12 +45,10 @@ export default function Home({user, userTasks}) {
     const router = useRouter()
     const [tasks, setTasks] = useState(userTasks)
     const [selectedTaskId, setSelectedTaskId] = useState()
-    const [selectedTask, setSelectedTask] = useState({})
 
     const [showDeleteUserAlert, setShowDeleteUserAlert] = useState(false)
     const [showDeleteTaskAlert, setShowDeleteTaskAlert] = useState(false)
     const [showDeleteAllAlert, setShowDeleteAllAlert] = useState(false)
-    const [showEditTaskAlert, setShowEditTaskAlert] = useState(false)
 
     const logoutHandler = () => {
         axios.get('/users/logout',).then(response => {
@@ -92,15 +90,6 @@ export default function Home({user, userTasks}) {
     const doTask = (_id, name, status) => {
         const newStatus = status === "todo" ? "finished" : "todo"
         axios.patch(`/tasks/${_id}`, {status: newStatus, name}).then(response => {
-            console.log(response)
-            getTasks()
-        }).catch(error => {
-            console.log(error)
-        })
-    }
-
-    const editTask = (_id, name, status) => {
-        axios.patch(`/tasks/${_id}`, {name, status}).then(response => {
             console.log(response)
             getTasks()
         }).catch(error => {
@@ -157,15 +146,6 @@ export default function Home({user, userTasks}) {
                     confirm={() => deleteAllTasks()}
                     cancel={() => setShowDeleteAllAlert(false)}
                 />
-                <EditTaskAlert
-                    show={showEditTaskAlert}
-                    title={"Edit Task"}
-                    nameOfTask={selectedTask.name}
-                    confirm={(name) => {
-                        editTask(selectedTask._id, name, selectedTask.status)
-                    }}
-                    cancel={() => setShowEditTaskAlert(false)}
-                />
                 <div className={"items-center flex flex-col"}>
                     <Profile name={user.name}
                              email={user.email}
@@ -191,10 +171,6 @@ export default function Home({user, userTasks}) {
                                       setShowDeleteTaskAlert(true)
                                   }}
                                   doTask={(_id, name, status) => doTask(_id, name, status)}
-                                  editTask={(_id, name, status) => {
-                                      setShowEditTaskAlert(true)
-                                      setSelectedTask({_id, name, status})
-                                  }}
                         />
                         <TaskList tasks={tasks?.filter(task => task.status === "finished")}
                                   deleteTaskHandler={(_id) => {
@@ -202,10 +178,6 @@ export default function Home({user, userTasks}) {
                                       setShowDeleteTaskAlert(true)
                                   }}
                                   doTask={(_id, name, status) => doTask(_id, name, status)}
-                                  editTask={(_id, name, status) => {
-                                      setShowEditTaskAlert(true)
-                                      setSelectedTask({_id, name, status})
-                                  }}
                         />
                     </div>
                 </div>
