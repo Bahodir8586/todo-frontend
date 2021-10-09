@@ -106,6 +106,14 @@ export default function Home({user, userTasks}) {
         })
     }
 
+    const deleteAllTasks = () => {
+        axios.delete('/tasks').then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
     return (
         <div>
             <Head>
@@ -115,13 +123,22 @@ export default function Home({user, userTasks}) {
             </Head>
 
             <main className={'container p-4 bg-gray-50 min-h-screen flex'}>
-                <Profile name={user.name}
-                         email={user.email}
-                         logout={logoutHandler}
-                         editUser={() => {
-                         }}
-                         deleteUser={deleteUser}
-                />
+                <div className={"items-center flex flex-col"}>
+                    <Profile name={user.name}
+                             email={user.email}
+                             editUser={() => {
+                             }}
+                             deleteUser={deleteUser}
+                    />
+                    <button type="button" onClick={deleteAllTasks}
+                            className="w-40 mb-2 px-4 py-2 text-base transition duration-200 border border-red-700 rounded-lg bg-white text-red-700 hover:bg-red-700 hover:text-white">
+                        Delete All Tasks
+                    </button>
+                    <button type="button" onClick={logoutHandler}
+                            className="w-40 px-4 py-2 text-base transition duration-200 border border-red-700 rounded-lg bg-white text-red-700 hover:bg-red-700 hover:text-white">
+                        Log out
+                    </button>
+                </div>
                 <div className={"w-full mb-8"}>
                     <CreateTask createTask={(taskName) => createTask(taskName)}/>
                     <div className={"flex w-full"}>
@@ -132,8 +149,8 @@ export default function Home({user, userTasks}) {
                         />
                         <TaskList tasks={tasks?.filter(task => task.status === "finished")}
                                   deleteTaskHandler={(_id) => deleteTask(_id)}
-                                  doTask={(_id, name, status) => doTask(_id,name, status)}
-                                  editTask={(_id, name, status) => editTask(_id, name,status)}
+                                  doTask={(_id, name, status) => doTask(_id, name, status)}
+                                  editTask={(_id, name, status) => editTask(_id, name, status)}
                         />
                     </div>
                 </div>
