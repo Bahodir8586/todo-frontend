@@ -99,8 +99,8 @@ export default function Home({user, userTasks}) {
         })
     }
 
-    const editTask = (_id, name) => {
-        axios.patch(`/tasks/${_id}`, {name}).then(response => {
+    const editTask = (_id, name, status) => {
+        axios.patch(`/tasks/${_id}`, {name, status}).then(response => {
             console.log(response)
             getTasks()
         }).catch(error => {
@@ -202,7 +202,10 @@ export default function Home({user, userTasks}) {
                                       setShowDeleteTaskAlert(true)
                                   }}
                                   doTask={(_id, name, status) => doTask(_id, name, status)}
-                                  editTask={(_id, name, status) => editTask(_id, name, status)}
+                                  editTask={(_id, name, status) => {
+                                      setShowEditTaskAlert(true)
+                                      setSelectedTask({_id, name, status})
+                                  }}
                         />
                     </div>
                 </div>

@@ -3,6 +3,7 @@ import {Dialog, Transition} from '@headlessui/react'
 import {ExclamationIcon} from '@heroicons/react/outline'
 
 export default function Example({show, title, text, nameOfTask, confirm, cancel}) {
+    console.log(nameOfTask)
     const [name, setName] = useState(nameOfTask)
     return (
         <Transition.Root show={show} as={Fragment}>
