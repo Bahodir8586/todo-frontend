@@ -58,6 +58,14 @@ export default function Home({user, tasks}) {
         })
     }
 
+    const createTask = (taskName) => {
+        axios.post('/tasks', {name: taskName, status: "todo"}).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
     const deleteTask = (_id) => {
         console.log(_id)
         axios.delete(`/tasks/${_id}`).then(response => {
@@ -84,7 +92,7 @@ export default function Home({user, tasks}) {
                          deleteUser={deleteUser}
                 />
                 <div className={"w-full mb-8"}>
-                    <CreateTask/>
+                    <CreateTask createTask={(taskName) => createTask(taskName)}/>
                     <div className={"flex w-full"}>
                         <TaskList tasks={tasks?.filter(task => task.status === "todo")}
                                   deleteTaskHandler={(_id) => deleteTask(_id)}/>
