@@ -43,7 +43,11 @@ export async function getServerSideProps(context) {
 export default function Home({user, userTasks}) {
     const router = useRouter()
     const [tasks, setTasks] = useState(userTasks)
-    const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+    const [selectedTaskId, setSelectedTaskId] = useState()
+
+    const [showDeleteUserAlert, setShowDeleteUserAlert] = useState(false)
+    const [showDeleteTaskAlert, setShowDeleteTaskAlert] = useState(false)
+    const [showDeleteAllAlert, setShowDeleteAllAlert] = useState(false)
 
     const logoutHandler = () => {
         axios.get('/users/logout',).then(response => {
@@ -55,6 +59,7 @@ export default function Home({user, userTasks}) {
     }
 
     const deleteUser = () => {
+        setShowDeleteUserAlert(false)
         axios.delete('/users').then(response => {
             console.log(response)
             router.replace('/')
@@ -101,6 +106,7 @@ export default function Home({user, userTasks}) {
     }
 
     const deleteTask = (_id) => {
+        setShowDeleteTaskAlert(false)
         axios.delete(`/tasks/${_id}`).then(response => {
             console.log(response)
             getTasks()
@@ -110,6 +116,7 @@ export default function Home({user, userTasks}) {
     }
 
     const deleteAllTasks = () => {
+        setShowDeleteAllAlert(false)
         axios.delete('/tasks').then(response => {
             console.log(response)
         }).catch(error => {
@@ -126,15 +133,35 @@ export default function Home({user, userTasks}) {
             </Head>
 
             <main className={'container p-4 bg-gray-50 min-h-screen flex'}>
-                <DeleteAlert show={showDeleteAlert} confirm={deleteUser} cancel={() => setShowDeleteAlert(false)}/>
+                <DeleteAlert
+                    show={showDeleteUserAlert}
+                    title={"Deactivate account"}
+                    text={"Are you sure you want to deactivate your account? All of your data will be                                           permanently removed from our servers forever. This action cannot be undone."}
+                    confirm={deleteUser}
+                    cancel={() => setShowDeleteUserAlert(false)}
+                />
+                <DeleteAlert
+                    show={showDeleteTaskAlert}
+                    title={"Delete Task"}
+                    text={"Are you sure to delete this task. This action cannot be undone"}
+                    confirm={() => deleteTask(selectedTaskId)}
+                    cancel={() => setShowDeleteTaskAlert(false)}
+                />
+                <DeleteAlert
+                    show={showDeleteAllAlert}
+                    title={"Delete All Tasks"}
+                    text={"Are you sure to delete all of your tasks. This action cannot be undone"}
+                    confirm={() => deleteAllTasks()}
+                    cancel={() => setShowDeleteAllAlert(false)}
+                />
                 <div className={"items-center flex flex-col"}>
                     <Profile name={user.name}
                              email={user.email}
                              editUser={() => {
                              }}
-                             deleteUser={() => setShowDeleteAlert(true)}
+                             deleteUser={() => setShowDeleteUserAlert(true)}
                     />
-                    <button type="button" onClick={deleteAllTasks}
+                    <button type="button" onClick={() => setShowDeleteAllAlert(true)}
                             className="w-40 mb-2 px-4 py-2 text-base transition duration-200 border border-red-700 rounded-lg bg-white text-red-700 hover:bg-red-700 hover:text-white">
                         Delete All Tasks
                     </button>
@@ -147,7 +174,10 @@ export default function Home({user, userTasks}) {
                     <CreateTask createTask={(taskName) => createTask(taskName)}/>
                     <div className={"flex w-full"}>
                         <TaskList tasks={tasks?.filter(task => task.status === "todo")}
-                                  deleteTaskHandler={(_id) => deleteTask(_id)}
+                                  deleteTaskHandler={(_id) => {
+                                      setSelectedTaskId(_id)
+                                      setShowDeleteTaskAlert(true)
+                                  }}
                                   doTask={(_id, name, status) => doTask(_id, name, status)}
                                   editTask={(_id, name, status) => editTask(_id, name, status)}
                         />
