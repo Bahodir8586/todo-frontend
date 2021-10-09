@@ -57,8 +57,9 @@ export default function Home({user, tasks}) {
         })
     }
 
-    const deleteTask = (id) => {
-        axios.delete(`/tasks/${id}`, {headers: {"Authorization": `Bearer ${Cookies.get('token')}`}}).then(response => {
+    const deleteTask = (_id) => {
+        console.log(_id)
+        axios.delete(`/tasks/${_id}`, {headers: {"Authorization": `Bearer ${Cookies.get('token')}`}}).then(response => {
             console.log(response)
         }).catch(error => {
             console.log(error)
@@ -82,7 +83,7 @@ export default function Home({user, tasks}) {
                          deleteUser={deleteUser}
                 />
                 <TaskList tasks={tasks?.filter(task => task.status === "todo")}
-                          deleteTaskHandler={(id) => deleteTask(id)}/>
+                          deleteTaskHandler={(_id) => deleteTask(_id)}/>
                 <TaskList tasks={tasks?.filter(task => task.status === "finished")}/>
             </main>
         </div>
