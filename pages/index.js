@@ -66,6 +66,22 @@ export default function Home({user, tasks}) {
         })
     }
 
+    const doTask = (_id) => {
+        axios.patch(`/tasks/${_id}`, {status: "finished"}).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    const editTask = (_id, name) => {
+        axios.patch(`/tasks/${_id}`, {name}).then(response => {
+            console.log(response)
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
     const deleteTask = (_id) => {
         console.log(_id)
         axios.delete(`/tasks/${_id}`).then(response => {
