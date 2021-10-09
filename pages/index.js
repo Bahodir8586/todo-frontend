@@ -5,6 +5,7 @@ import Profile from "../components/Profile";
 import Cookies from 'js-cookie'
 import TaskList from "../components/TaskList";
 import CreateTask from "../components/CreateTask";
+import DeleteAlert from "./../components/Alerts/DeleteAlert"
 import {useState} from "react";
 
 export async function getServerSideProps(context) {
@@ -42,6 +43,8 @@ export async function getServerSideProps(context) {
 export default function Home({user, userTasks}) {
     const router = useRouter()
     const [tasks, setTasks] = useState(userTasks)
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+
     const logoutHandler = () => {
         axios.get('/users/logout',).then(response => {
             Cookies.remove('token')
@@ -123,12 +126,13 @@ export default function Home({user, userTasks}) {
             </Head>
 
             <main className={'container p-4 bg-gray-50 min-h-screen flex'}>
+                <DeleteAlert show={showDeleteAlert} confirm={deleteUser} cancel={() => setShowDeleteAlert(false)}/>
                 <div className={"items-center flex flex-col"}>
                     <Profile name={user.name}
                              email={user.email}
                              editUser={() => {
                              }}
-                             deleteUser={deleteUser}
+                             deleteUser={() => setShowDeleteAlert(true)}
                     />
                     <button type="button" onClick={deleteAllTasks}
                             className="w-40 mb-2 px-4 py-2 text-base transition duration-200 border border-red-700 rounded-lg bg-white text-red-700 hover:bg-red-700 hover:text-white">
