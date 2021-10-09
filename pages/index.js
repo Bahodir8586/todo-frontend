@@ -90,7 +90,8 @@ export default function Home({user}) {
                          }}
                          deleteUser={deleteUser}
                 />
-                <TaskList tasks={tasks}/>
+                <TaskList tasks={tasks.filter(task=>task.status==="todo")}/>
+                <TaskList tasks={tasks.filter(task=>task.status==="finished")}/>
             </main>
         </div>
     )
