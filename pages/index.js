@@ -4,6 +4,7 @@ import {useRouter} from "next/router";
 import Profile from "../components/Profile";
 import Cookies from 'js-cookie'
 import TaskList from "../components/TaskList";
+import CreateTask from "../components/CreateTask";
 
 export async function getServerSideProps(context) {
     const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
@@ -40,7 +41,7 @@ export async function getServerSideProps(context) {
 export default function Home({user, tasks}) {
     const router = useRouter()
     const logoutHandler = () => {
-        axios.get('/users/logout', ).then(response => {
+        axios.get('/users/logout',).then(response => {
             Cookies.remove('token')
             router.replace('/')
         }).catch(error => {
@@ -82,9 +83,14 @@ export default function Home({user, tasks}) {
                          }}
                          deleteUser={deleteUser}
                 />
-                <TaskList tasks={tasks?.filter(task => task.status === "todo")}
-                          deleteTaskHandler={(_id) => deleteTask(_id)}/>
-                <TaskList tasks={tasks?.filter(task => task.status === "finished")}/>
+                <div className={"w-full mb-8"}>
+                    <CreateTask/>
+                    <div className={"flex w-full"}>
+                        <TaskList tasks={tasks?.filter(task => task.status === "todo")}
+                                  deleteTaskHandler={(_id) => deleteTask(_id)}/>
+                        <TaskList tasks={tasks?.filter(task => task.status === "finished")}/>
+                    </div>
+                </div>
             </main>
         </div>
     )
