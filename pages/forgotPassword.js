@@ -1,4 +1,5 @@
 import React from 'react';
+import ForgotPasswordForm from "../components/ForgotPassword";
 
 export async function getServerSideProps(context) {
     const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
@@ -15,10 +16,11 @@ export async function getServerSideProps(context) {
 }
 
 const ForgotPassword = () => {
+    const forgotPasswordHandler = (email) => {
+        console.log(email)
+    }
     return (
-        <div>
-
-        </div>
+        <ForgotPasswordForm submitForm={(e) => forgotPasswordHandler(e)}/>
     );
 };
 
