@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Link from "next/link";
 
-const ForgotPasswordForm = ({submitForm}) => {
+const ForgotPasswordForm = ({submitForm, errorMessage}) => {
     const [email, setEmail] = useState("")
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -28,6 +28,9 @@ const ForgotPasswordForm = ({submitForm}) => {
                                     required
                                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 />
+                            </div>
+                            <div className={"font-medium text-red-600 text-xs ml-2"}>
+                                {errorMessage}
                             </div>
                         </div>
 

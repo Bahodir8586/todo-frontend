@@ -12,8 +12,7 @@ const ResetPasswordForm = ({submitForm}) => {
                         e.preventDefault()
                         submitForm(password, passwordConfirm)
                     }}>
-                        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">Sign in to your
-                            account</h2>
+                        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">Reset password</h2>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                                 Password
