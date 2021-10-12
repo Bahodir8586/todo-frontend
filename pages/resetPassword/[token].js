@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useRouter} from "next/router";
 import ResetPasswordForm from "../../components/ResetPassword";
 import axios from "../../components/axios";
@@ -18,19 +18,18 @@ export async function getServerSideProps(context) {
 
 const ResetPassword = () => {
     const router = useRouter()
-    // const [errorMessage, setErrorMessage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
     const resetPasswordHandler = (password, passwordConfirm) => {
         const token = router.asPath.split("/")[2];
         console.log(token, password, passwordConfirm)
         axios.patch(`/users/resetPassword/${token}`, {password, passwordConfirm}).then((response) => {
             console.log(response)
         }).catch(error => {
-            console.log(error)
-
+            setErrorMessage(error.response?.data?.message)
         })
     }
     return (
-        <ResetPasswordForm submitForm={(p, pc) => resetPasswordHandler(p, pc)}/>
+        <ResetPasswordForm submitForm={(p, pc) => resetPasswordHandler(p, pc)} errorMessage={errorMessage}/>
     );
 };
 
