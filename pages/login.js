@@ -5,8 +5,12 @@ import {useRouter} from "next/router";
 import Cookies from 'js-cookie'
 
 export async function getServerSideProps(context) {
-    const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
-    if (jwt) {
+    const cookies = context.req.headers.cookie?.split('; ').reduce((prevValue, currentValue) => {
+        const key = currentValue.split('=')[0];
+        prevValue[key] = currentValue.split('=')[1];
+        return prevValue;
+    }, {})
+    if (cookies?.token) {
         return {
             redirect: {
                 destination: '/',

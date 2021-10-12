@@ -9,8 +9,12 @@ import DeleteAlert from "./../components/Alerts/DeleteAlert"
 import {useState} from "react";
 
 export async function getServerSideProps(context) {
-    const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
-    if (!jwt) {
+    const cookies = context.req.headers.cookie?.split('; ').reduce((prevValue, currentValue) => {
+        const key = currentValue.split('=')[0];
+        prevValue[key] = currentValue.split('=')[1];
+        return prevValue;
+    }, {})
+    if (!cookies?.token) {
         return {
             redirect: {
                 destination: '/login',
@@ -20,7 +24,7 @@ export async function getServerSideProps(context) {
     }
     const response = await fetch("http://localhost:5000/api/users", {
         headers: {
-            'Authorization': `Bearer ${jwt}`
+            'Authorization': `Bearer ${cookies.token}`
         },
     })
     const data = await response.json()
