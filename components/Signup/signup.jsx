@@ -7,7 +7,7 @@ const Signup = ({submitForm}) => {
     const [password, setPassword] = useState("")
     const [passwordConfirm, setPasswordConfirm] = useState("")
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 flex flex-col justify-center sm:px-6 lg:px-8">
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                     <form className="space-y-6" onSubmit={(e) => {
@@ -85,22 +85,10 @@ const Signup = ({submitForm}) => {
                         </div>
 
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <input
-                                    id="remember-me"
-                                    name="remember-me"
-                                    type="checkbox"
-                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                                />
-                                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                                    Remember me
-                                </label>
-                            </div>
-
                             <div className="text-sm">
-                                <Link href={'/signup'}>
+                                <Link href={'/login'}>
                                     <a className="font-medium text-indigo-600 hover:text-indigo-500">
-                                        Forgot your password?
+                                        Already have an account?
                                     </a>
                                 </Link>
                             </div>
