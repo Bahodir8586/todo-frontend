@@ -16,8 +16,11 @@ export async function getServerSideProps(context) {
 }
 
 const ResetPassword = () => {
+    const resetPasswordHandler = (password, passwordConfirm) => {
+        console.log(password, passwordConfirm)
+    }
     return (
-        <ResetPasswordForm/>
+        <ResetPasswordForm submitForm={(p, pc) => resetPasswordHandler(p, pc)}/>
     );
 };
 
