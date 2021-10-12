@@ -1,4 +1,5 @@
 import React from 'react';
+import ResetPasswordForm from "../../components/ResetPassword";
 
 export async function getServerSideProps(context) {
     const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
@@ -16,9 +17,7 @@ export async function getServerSideProps(context) {
 
 const ResetPassword = () => {
     return (
-        <div>
-
-        </div>
+        <ResetPasswordForm/>
     );
 };
 

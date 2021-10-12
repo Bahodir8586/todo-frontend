@@ -6,7 +6,6 @@ import Cookies from 'js-cookie'
 import TaskList from "../components/TaskList";
 import CreateTask from "../components/CreateTask";
 import DeleteAlert from "./../components/Alerts/DeleteAlert"
-import EditTaskAlert from "./../components/Alerts/EditTaskAlert"
 import {useState} from "react";
 
 export async function getServerSideProps(context) {
