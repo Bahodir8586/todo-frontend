@@ -5,7 +5,6 @@ import Cookies from "js-cookie";
 
 export async function getServerSideProps(context) {
     const jwt = context.req.headers.cookie?.split(';')[1]?.split('=')[1]
-    console.log(jwt)
     if (jwt) {
         return {
             redirect: {

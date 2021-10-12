@@ -24,7 +24,7 @@ export async function getServerSideProps(context) {
         },
     })
     const data = await response.json()
-    if (data.status === "error") {
+    if (data.status === "error" || data.status === "fail") {
         return {
             redirect: {
                 destination: '/login',
