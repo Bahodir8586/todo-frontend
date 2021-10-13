@@ -28,6 +28,7 @@ const ResetPassword = () => {
         const token = router.asPath.split("/")[2];
         console.log(token, password, passwordConfirm)
         axios.patch(`/users/resetPassword/${token}`, {password, passwordConfirm}).then((response) => {
+            setErrorMessage("")
             console.log(response)
             Cookies.set('token', response.data.token)
             router.push('/')

@@ -25,6 +25,7 @@ const ForgotPassword = () => {
     const [errorMessage, setErrorMessage] = useState("")
     const forgotPasswordHandler = (email) => {
         axios.post('/users/forgotPassword', {email}).then(response => {
+            setErrorMessage("")
             console.log(response)
             setShowForm(false)
         }).catch(error => {

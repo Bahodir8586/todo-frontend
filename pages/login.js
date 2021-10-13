@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Login from "../components/Login";
 import axios from "../components/axios";
 import {useRouter} from "next/router";
@@ -22,17 +22,20 @@ export async function getServerSideProps(context) {
 }
 
 const LoginPage = () => {
+    const [errorMessage, setErrorMessage] = useState("")
     const router = useRouter()
     const loginHandler = (email, password) => {
         axios.post('/users/login', {email, password}).then(response => {
+            setErrorMessage("")
             Cookies.set('token', response.data.token)
             router.push('/')
         }).catch(error => {
-            console.log(error)
+            console.log(error.response)
+            setErrorMessage(error.response?.data?.message)
         })
     }
     return (
-        <Login submitForm={(e, p) => loginHandler(e, p)}/>
+        <Login submitForm={(e, p) => loginHandler(e, p)} errorMessage={errorMessage}/>
     );
 };
 
